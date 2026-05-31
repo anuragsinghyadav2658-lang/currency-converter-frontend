@@ -1,0 +1,603 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column; /* 👈 Ye line zaroori hai taaki sab upar-neeche aaye */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* height ko min-height kar diya taaki lamba hone par scroll ho sake */
+  margin: 0;
+  background-color: #1a1a24;
+  color: #e0e0e0;
+}
+
+.converter-container {
+  background-color: #2b2b36;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+  width: 340px;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 0; /* Default margin hata diya */
+  margin-bottom: 20px;
+  color: #a8b2d1;
+}
+
+.amount-box p,
+.from p,
+.to p {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #8892b0;
+  position: relative;
+}
+
+/* Idle state (Jab kuch nahi kiya) - Color #1A1A24 */
+.amount-box input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1.2rem;
+  background-color: #1a1a24; /* FIX: Default pehle jaisa dark color */
+  border: 1px solid #555;
+  color: white;
+  border-radius: 12px;
+  box-sizing: border-box;
+  outline: none;
+  transition:
+    background-color 0.3s ease,
+    border-radius 0.1s; /* Makhan transition */
+}
+
+.amount-box input:focus {
+  border-color: #64ffda; /* Soft teal focus */
+}
+
+/* Jab input pe click ho ya type ho (Merged Box) - Color #3C3C3C */
+.amount-box input.active {
+  background-color: #1a1a24; /* FIX: Sirf click/open hone par merge wala color */
+  border-color: #64ffda;
+  border-bottom-color: transparent;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.amount-box {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.dropdowns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0; /* Yahan se extra space hata diya */
+  margin-bottom: 20px;
+}
+
+.select-container {
+  display: flex;
+  align-items: center;
+  background-color: #1a1a24;
+  border: 1px solid #454555;
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.select-container img {
+  width: 30px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+select {
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+select option {
+  background-color: #2b2b36;
+  color: white;
+}
+
+.exchange-icon {
+  font-size: 1.2rem;
+  color: #64ffda;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.rate-info {
+  text-align: center;
+  margin: 20px 0; /* Wapas original margin */
+  font-size: 1rem;
+  color: #a8b2d1;
+  background-color: #1a1a24;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+#convert-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  background-color: #64ffda;
+  color: #1a1a24;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+#convert-btn:hover {
+  background-color: #52e0c4;
+}
+
+.final-result {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #64ffda;
+}
+
+/* Custom Dropdown Trick */
+.visible-code {
+  font-size: 1.1rem;
+  color: white;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.arrow-icon {
+  color: #a8b2d1;
+  font-size: 0.9rem;
+}
+
+.hidden-select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* Isko gayab kar diya */
+  cursor: pointer;
+}
+
+.update-text {
+  font-size: 0.75rem;
+  color: #8892b0;
+  margin-top: 8px;
+  font-weight: normal;
+}
+
+.final-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 0;
+  margin-top: 10px; /* Ise 15px se 10px kar diya taaki thoda upar jaye */
+  width: 100%;
+}
+
+#copy-btn {
+  font-size: 1.2rem;
+  color: #a8b2d1;
+  cursor: pointer;
+  transition: 0.3s;
+  display: none; /* Starting me hide rakhenge jab tak result na aaye */
+}
+
+#copy-btn:hover {
+  color: #64ffda;
+}
+
+.final-result {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Icon aur text ko vertical align karega */
+  gap: 15px;
+  margin: 0;
+  margin-top: 20px; /* Alignment fix: Upar se wapas neeche dhakel diya */
+  /* margin-bottom: 10px; */
+  width: 100%;
+}
+
+/* Naya logic: Lamba number next line me aur scrollbar ke sath */
+#final-amount {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #64ffda;
+  overflow-wrap: anywhere;
+  max-height: 75px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Custom Scrollbar Design (Jisse dark theme me achha lage) */
+#final-amount::-webkit-scrollbar {
+  width: 6px; /* Patla scrollbar */
+}
+#final-amount::-webkit-scrollbar-thumb {
+  background: #64748b; /* Professional dim color */
+  border-radius: 10px;
+}
+
+/* --- NAYA CUSTOM DROPDOWN DESIGN --- */
+.custom-dropdown {
+  position: relative;
+}
+
+.select-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1a1a24;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 120px;
+}
+
+.content-box {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 250px; /* Search box lamba hoga taaki typing me aasaani ho */
+  background-color: #2b2b36;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+  display: none; /* Starting me box chupa rahega */
+  z-index: 999;
+}
+
+.custom-dropdown.active .content-box {
+  display: block; /* Click karne pe show hoga */
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: #1a1a24;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+
+.search-box i {
+  color: #a8b2d1;
+  font-size: 0.9rem;
+}
+
+.search-box input {
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto; /* List lumbi hui toh scroll aayega */
+}
+
+.options li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #e0e0e0;
+  gap: 10px;
+  transition: 0.2s;
+}
+
+.options li:hover {
+  background-color: #1a1a24;
+  color: #64ffda;
+}
+
+/* --- DARK SCROLLBAR MAGIC --- */
+.options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.options::-webkit-scrollbar-track {
+  background: #1a1a24;
+  border-radius: 10px;
+}
+
+.options::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 10px;
+}
+
+/* View Chart Button Design */
+.chart-toggle-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#view-chart-btn {
+  background: none;
+  border: 1px solid #64ffda;
+  color: #64ffda;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+#view-chart-btn:hover {
+  background-color: rgba(100, 255, 218, 0.1);
+}
+
+/* Hidden Chart Section - Matching Main Box */
+#chart-section {
+  background-color: #2b2b36;
+  width: 320px; /* Tune manually 320px kiya, usi se match kar diya */
+  box-sizing: border-box; /* FIX: Isse padding width me add nahi hogi aur box right me nahi bhagega */
+  border-radius: 15px;
+  margin: 15px auto 0 auto; /* FIX: Isse box ekdum perfectly center me align ho jayega */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+  padding: 0 15px;
+  position: relative;
+}
+
+#chart-section.show {
+  max-height: 280px;
+  opacity: 1;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+/* Google Style Tabs */
+.chart-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #3c3f58;
+  padding-bottom: 10px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #8892b0;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.tab-btn:hover {
+  color: #64ffda;
+}
+
+.tab-btn.active {
+  background-color: rgba(100, 255, 218, 0.1);
+  color: #64ffda;
+}
+
+/* Jab Chart dikhega tab ye class add hogi JS se */
+#chart-section.show {
+  max-height: 300px;
+  opacity: 1;
+  padding: 20px 30px;
+  margin-bottom: 30px; /* Page ke neeche thoda gap */
+}
+
+/* Placeholder ka color change karenge taaki wo dark theme me achha lage */
+#amount::placeholder {
+  color: #64748b; /* Halka grey/blue color */
+  font-size: 0.95rem;
+  font-weight: normal;
+}
+
+/* 1. Button ko neeche border ke paas laane ke liye (margin-bottom: -10px add kiya) */
+.chart-toggle-container {
+  margin-top: 15px;
+  padding-top: 15px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid #3c3f58;
+  margin-bottom: -10px; /* FIX: Border se doori kam kar di, ab top title jaisa lagega */
+}
+
+#view-chart-btn {
+  background: none;
+  border: 1px solid #64ffda;
+  color: #64ffda;
+  padding: 8px 18px; /* Thoda sa chhota kiya taaki box me fit aaye */
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.3s;
+  font-weight: bold;
+  user-select: none;
+}
+
+#view-chart-btn:hover {
+  background-color: rgba(100, 255, 218, 0.1);
+  box-shadow: 0px 4px 10px rgba(100, 255, 218, 0.2);
+}
+
+/* Floating Tooltip Design */
+.chart-tooltip {
+  position: absolute;
+  /* top: 55px; <--- IS LINE KO HATA DIYA HAI */
+  left: 0;
+  pointer-events: none;
+  display: none;
+  background-color: #1a1a24;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #3c3f58;
+  z-index: 100;
+  white-space: nowrap;
+
+  /* FIX: Box ko exact mouse point ke thoda upar aur center me dikhane ke liye */
+  transform: translate(-50%, -120%);
+  transition:
+    top 0.1s ease,
+    left 0.1s ease; /* Makhan jaisa smooth movement! */
+}
+
+#tooltip-rate {
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+#tooltip-date {
+  color: #8892b0;
+  font-size: 0.8rem;
+}
+
+/* Scrollbar and Chart box tweaks */
+#chart-section {
+  position: relative; /* Tooltip ke liye zaroori */
+  width: 350px;
+}
+
+/* 4. Canvas (Graph) ki height restrict ki */
+#historicalChart {
+  max-height: 180px;
+}
+
+/* SKELETON / SHIMMER LOADING EFFECT */
+.skeleton {
+  /* Base color aur chamakne wala gradient */
+  background: #2b2b36;
+  background: linear-gradient(110deg, #2b2b36 8%, #3c3f58 18%, #2b2b36 33%);
+  border-radius: 5px;
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+  color: transparent !important; /* Asli text ko chupa dega */
+}
+
+/* Alag-alag text ke hisaab se unke skeleton ka size */
+.skeleton-rate {
+  height: 18px;
+  width: 60%;
+  margin: 0 auto 10px auto;
+}
+
+.skeleton-amount {
+  height: 32px;
+  width: 80%;
+  margin: 10px auto;
+}
+
+.skeleton-time {
+  height: 12px;
+  width: 40%;
+  margin: 10px auto 0 auto;
+}
+
+/* Chamak ko left se right move karne ka animation */
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+/* ==========================================
+   DROPDOWN SCROLLBAR DESIGN (WIDER)
+========================================== */
+#from-options::-webkit-scrollbar,
+#to-options::-webkit-scrollbar,
+.options::-webkit-scrollbar {
+  width: 8px; /* FIX: Pehle patla tha, ab isko 8px chauda (wider) kar diya hai */
+}
+
+#from-options::-webkit-scrollbar-track,
+#to-options::-webkit-scrollbar-track,
+.options::-webkit-scrollbar-track {
+  background: #1a1a24; /* Background/Track ka dark color */
+  border-radius: 8px;
+}
+
+#from-options::-webkit-scrollbar-thumb,
+#to-options::-webkit-scrollbar-thumb,
+.options::-webkit-scrollbar-thumb {
+  background: #3c3f58; /* Scrollbar ka color thoda light grey/blue rakha hai taaki clearly dikhe */
+  border-radius: 8px;
+}
+
+#from-options::-webkit-scrollbar-thumb:hover,
+#to-options::-webkit-scrollbar-thumb:hover,
+.options::-webkit-scrollbar-thumb:hover {
+  background: #4b4e6d; /* Jab mouse le jayenge toh thoda aur chamkega */
+}
+
+.history-dropdown {
+  position: absolute;
+  top: 100%; /* Input ke theek neeche attach hoga */
+  left: 0;
+  width: 100%;
+  background-color: #1a1a24; /* Input ke jaisa same color */
+  border: 1px solid #64ffda; /* Glow border continue */
+  border-top: none; /* MAGIC: Upar ki border gayab, input me jud jayega */
+  border-radius: 0 0 12px 12px; /* Neeche se gol */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  padding-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.history-dropdown.active {
+  display: block;
+}
+
+.history-item {
+  padding: 10px 20px;
+  border-bottom: none;
+  cursor: pointer;
+  color: #e0e0e0;
+  font-size: 0.95em;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Purane hover wale code ko isse replace kar de */
+.history-item:hover,
+.history-item.highlight { /* NAYI CLASS: Keyboard se select hone par active hogi */
+  background-color: #2b2b36;
+  color: #64ffda; /* Text ko bhi thoda chamka diya */
+}
+
+
+.history-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+.history-dropdown::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 10px;
+}

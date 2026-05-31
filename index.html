@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="converter-container">
+      <h2>Currency Converter</h2>
+
+      <div class="amount-box" style="position: relative">
+        <input type="number" id="amount" placeholder="Enter Amount" />
+
+        <div id="amount-history-dropdown" class="history-dropdown"></div>
+      </div>
+
+      <div class="dropdowns">
+        <div class="from">
+          <p>From</p>
+          <div class="custom-dropdown" id="from-dropdown">
+            <div class="select-box">
+              <img
+                src="https://flagcdn.com/48x36/us.png"
+                id="from-flag"
+                alt="flag"
+              />
+              <span id="from-text" class="visible-code">USD</span>
+              <i class="fa-solid fa-angle-down arrow-icon"></i>
+            </div>
+            <div class="content-box">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                  type="text"
+                  placeholder="Search country..."
+                  id="from-search"
+                />
+              </div>
+              <ul class="options" id="from-options"></ul>
+            </div>
+          </div>
+        </div>
+
+        <i class="fa-solid fa-arrow-right-arrow-left exchange-icon"></i>
+
+        <div class="to">
+          <p>To</p>
+          <div class="custom-dropdown" id="to-dropdown">
+            <div class="select-box">
+              <img
+                src="https://flagcdn.com/48x36/in.png"
+                id="to-flag"
+                alt="flag"
+              />
+              <span id="to-text" class="visible-code">INR</span>
+              <i class="fa-solid fa-angle-down arrow-icon"></i>
+            </div>
+            <div class="content-box">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                  type="text"
+                  placeholder="Search country..."
+                  id="to-search"
+                />
+              </div>
+              <ul class="options" id="to-options"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rate-info">
+        <p id="exchange-rate">Getting exchange rate...</p>
+        <p id="update-time" class="update-text"></p>
+      </div>
+
+      <button id="convert-btn">Get Exchange Rate</button>
+
+      <div class="final-result">
+        <h3 id="final-amount"></h3>
+        <i class="fa-regular fa-copy" id="copy-btn" title="Copy Result"></i>
+      </div>
+
+      <div class="chart-toggle-container">
+        <button id="view-chart-btn">
+          <i class="fa-solid fa-chart-line"></i> View 7-Day Trend
+        </button>
+      </div>
+
+      <div id="chart-section" class="chart-container-hidden">
+        <div class="chart-tabs">
+          <button class="tab-btn active" data-period="1d">1D</button>
+          <button class="tab-btn" data-period="5d">5D</button>
+          <button class="tab-btn" data-period="1m">1M</button>
+          <button class="tab-btn" data-period="1y">1Y</button>
+          <button class="tab-btn" data-period="5y">5Y</button>
+        </div>
+
+        <div id="chart-tooltip" class="chart-tooltip">
+          <span id="tooltip-rate"></span>
+          <span id="tooltip-date"></span>
+        </div>
+
+        <canvas id="historicalChart"></canvas>
+      </div>
+    </div>
+
+    <script src="codes.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
