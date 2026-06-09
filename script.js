@@ -162,7 +162,7 @@ const getExchangeRate = async () => {
   updateTimeText.classList.add("skeleton", "skeleton-time");
 
   try {
-    const URL = `http://localhost:8080/api/currency/rates/${savedFrom}`;
+    const URL = `https://currency-converter-pro-1.onrender.com/api/currency/rates/${savedFrom}`;
     let response = await fetch(URL);
     let data = await response.json();
 
