@@ -602,8 +602,14 @@ select option {
   border-radius: 10px;
 }
 
-/* Sirf dusre (right side waale) dropdown ko target kar rahe hain */
-.dropdowns .custom-dropdown:nth-child(2) .content-box {
+/* Left side dropdown (From) ko default left me rakho */
+.dropdowns .custom-dropdown:first-of-type .content-box {
+    left: 0 !important;
+    right: auto !important;
+}
+
+/* Right side dropdown (To) ko right se align karo taki andar khule */
+.dropdowns .custom-dropdown:last-of-type .content-box {
     left: auto !important;
     right: 0 !important;
 }
