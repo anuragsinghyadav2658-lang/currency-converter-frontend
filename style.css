@@ -602,14 +602,14 @@ select option {
   border-radius: 10px;
 }
 
-/* Left side dropdown (From) ko default left me rakho */
-.dropdowns .custom-dropdown:first-of-type .content-box {
-    left: 0 !important;
-    right: auto !important;
-}
-
-/* Right side dropdown (To) ko right se align karo taki andar khule */
-.dropdowns .custom-dropdown:last-of-type .content-box {
+/* --- RIGHT DROPDOWN SPECIFIC ALIGNMENT FIX --- */
+.dropdowns .from + .exchange-icon + .to .content-box {
     left: auto !important;
     right: 0 !important;
+}
+
+/* Ensure left dropdown stays exactly aligned to the left */
+.dropdowns .from .content-box {
+    left: 0 !important;
+    right: auto !important;
 }
