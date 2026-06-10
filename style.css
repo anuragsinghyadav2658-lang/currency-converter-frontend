@@ -601,3 +601,10 @@ select option {
   background: #64748b;
   border-radius: 10px;
 }
+
+/* Right-side dropdown ko screen se bahar jaane se rokne ke liye */
+.dropdowns .custom-dropdown:last-child .content-box,
+.to .content-box {
+    left: auto !important;
+    right: 0 !important;
+}
