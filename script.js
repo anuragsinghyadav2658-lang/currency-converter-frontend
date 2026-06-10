@@ -513,13 +513,14 @@ viewChartBtn.addEventListener("click", (e) => {
 // ==========================================
 // 5. INITIALIZE ON LOAD
 // ==========================================
-// window.addEventListener("load", () => {
-//   populateOptions(fromOptions, "from");
-//   populateOptions(toOptions, "to");
-//   updateUI("from", savedFrom);
-//   updateUI("to", savedTo);
-//   getExchangeRate();
-// });
+window.addEventListener("load", () => {
+  populateOptions(fromOptions, "from");
+  populateOptions(toOptions, "to");
+  updateUI("from", savedFrom);
+  updateUI("to", savedTo);
+  getExchangeRate();
+  fetchHistory();
+});
 
 // 1. Input par click karte hi dropdown aur input dono merge ho jayenge
 amountInput.addEventListener("click", (e) => {
@@ -541,36 +542,48 @@ document.addEventListener("click", (e) => {
 // ==========================================
 let globalHistoryData = []; // Database ki saari history memory me save rakhne ke liye
 
+// SECTION 6 ke neeche ye paste karo
+const fetchHistory = async () => {
+  try {
+    const response = await fetch("https://currency-converter-pro-1.onrender.com/api/currency/history");
+    const data = await response.json();
+    globalHistoryData = data; 
+    console.log("History loaded:", globalHistoryData);
+  } catch (error) {
+    console.error("History fetch error:", error);
+  }
+};
+
 // SUGGESTION RENDER KARNE KA HELPER FUNCTION
-// const renderDropdownSuggestions = (records) => {
-//   if (!amountDropdown) return;
-//   amountDropdown.innerHTML = "";
+const renderDropdownSuggestions = (records) => {
+  if (!amountDropdown) return;
+  amountDropdown.innerHTML = "";
 
-//   if (records.length === 0) {
-//     let div = document.createElement("div");
-//     div.classList.add("history-item");
-//     div.innerHTML = `<span style="color: #8892b0; font-style: italic;">No matching record found</span>`;
-//     amountDropdown.appendChild(div);
-//     return;
-//   }
+  if (records.length === 0) {
+    let div = document.createElement("div");
+    div.classList.add("history-item");
+    div.innerHTML = `<span style="color: #8892b0; font-style: italic;">No matching record found</span>`;
+    amountDropdown.appendChild(div);
+    return;
+  }
 
-//   records.forEach((record) => {
-//     let div = document.createElement("div");
-//     div.classList.add("history-item");
-//     div.innerHTML = `<span>${record.amount} ${record.fromCurrency} ➔ ${record.toCurrency}</span>`;
+  records.forEach((record) => {
+    let div = document.createElement("div");
+    div.classList.add("history-item");
+    div.innerHTML = `<span>${record.amount} ${record.fromCurrency} ➔ ${record.toCurrency}</span>`;
 
-//     div.addEventListener("click", () => {
-//       amountInput.value = record.amount;
-//       amountDropdown.classList.remove("active");
-//       amountInput.classList.remove("active"); // Merge hatao
+    div.addEventListener("click", () => {
+      amountInput.value = record.amount;
+      amountDropdown.classList.remove("active");
+      amountInput.classList.remove("active"); // Merge hatao
 
-//       amountInput.blur(); // NAYA: Mobile me keyboard turant band karne ke liye
-//       getExchangeRate(); // NAYA: Turant conversion function call kar do
-//     });
+      amountInput.blur(); // NAYA: Mobile me keyboard turant band karne ke liye
+      getExchangeRate(); // NAYA: Turant conversion function call kar do
+    });
 
-//     amountDropdown.appendChild(div);
-//   });
-// };
+    amountDropdown.appendChild(div);
+  });
+};
 
 // TYPING KARTE WAQT SMART FILTER (AUTO-SUGGEST)
 amountInput.addEventListener("input", (e) => {
@@ -640,25 +653,3 @@ const fetchHistory = async () => {
 };
 
 window.addEventListener("load", fetchHistory);
-
-// Naya function add karo
-const fetchHistory = async () => {
-  try {
-    const response = await fetch("https://currency-converter-pro-1.onrender.com/api/currency/history");
-    const data = await response.json();
-    globalHistoryData = data; // Yahan tera global variable update hoga
-    console.log("History loaded:", globalHistoryData);
-  } catch (error) {
-    console.error("History fetch error:", error);
-  }
-};
-
-// Application load hote hi history mangwa lo
-window.addEventListener("load", () => {
-  populateOptions(fromOptions, "from");
-  populateOptions(toOptions, "to");
-  updateUI("from", savedFrom);
-  updateUI("to", savedTo);
-  getExchangeRate();
-  fetchHistory(); // <--- Yahan call karna zaroori hai
-});
