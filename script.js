@@ -542,18 +542,6 @@ document.addEventListener("click", (e) => {
 // ==========================================
 let globalHistoryData = []; // Database ki saari history memory me save rakhne ke liye
 
-// SECTION 6 ke neeche ye paste karo
-const fetchHistory = async () => {
-  try {
-    const response = await fetch("https://currency-converter-pro-1.onrender.com/api/currency/history");
-    const data = await response.json();
-    globalHistoryData = data; 
-    console.log("History loaded:", globalHistoryData);
-  } catch (error) {
-    console.error("History fetch error:", error);
-  }
-};
-
 // SUGGESTION RENDER KARNE KA HELPER FUNCTION
 const renderDropdownSuggestions = (records) => {
   if (!amountDropdown) return;
@@ -653,3 +641,4 @@ const fetchHistory = async () => {
 };
 
 window.addEventListener("load", fetchHistory);
+ 
