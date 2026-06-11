@@ -655,7 +655,7 @@ const processAIQuery = async (queryText) => {
 
   try {
     // 1. Apne Spring Boot backend ko text bhejo
-    const response = await fetch("https://currency-converter-pro-1.onrender.com/api/currency/smart-convert", {
+    const response = await fetch("http://localhost:8080/api/currency/smart-convert", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query: queryText })
