@@ -268,7 +268,7 @@ amountInput.addEventListener("keydown", (e) => {
     }
     // Agar normally amount likh kar direct Enter dabaya hai
     else {
-      getExchangeRate();
+      handleConversion();
       amountDropdown.classList.remove("active");
       amountInput.classList.remove("active");
       amountInput.blur(); // Keyboard band karne ke liye (Mobile focus)
@@ -642,3 +642,43 @@ const fetchHistory = async () => {
 
 window.addEventListener("load", fetchHistory);
  
+// ==========================================
+// 9. SMART AI INPUT HANDLER
+// ==========================================
+const processAIQuery = async (queryText) => {
+  // Loader dikhao
+  rateText.innerText = " ";
+  finalAmountText.innerText = " ";
+  rateText.classList.add("skeleton", "skeleton-rate");
+  finalAmountText.classList.add("skeleton", "skeleton-amount");
+  copyBtn.style.display = "none";
+
+  try {
+    // Yahan hum baad me apne Spring Boot AI API ka URL daalenge
+    console.log("AI ke paas bheja ja raha hai: ", queryText);
+  } catch (error) {
+    rateText.classList.remove("skeleton", "skeleton-rate");
+    finalAmountText.classList.remove("skeleton", "skeleton-amount");
+    rateText.innerText = "AI is thinking... (Backend not connected yet)";
+    console.error(error);
+  }
+};
+
+const handleConversion = () => {
+  let val = amountInput.value.trim();
+  // Check: Agar string me koi bhi letter (A-Z, a-z) hai
+  if (/[a-zA-Z]/.test(val)) {
+    processAIQuery(val); // Text hai toh AI function chalao
+  } else {
+    getExchangeRate(); // Sirf number hai toh purana function chalao
+  }
+};
+
+// ==========================================
+// 10. CONVERT BUTTON CLICK EVENT (Jo missing tha)
+// ==========================================
+convertBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  handleConversion(); // Naya function call kiya
+  if (chartSection.classList.contains("show")) renderChart(activePeriod);
+});
