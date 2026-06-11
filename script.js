@@ -643,7 +643,7 @@ const fetchHistory = async () => {
 window.addEventListener("load", fetchHistory);
  
 // ==========================================
-// 9. SMART AI INPUT HANDLER
+// 9. SMART AI INPUT HANDLER (REAL BACKEND LINKED)
 // ==========================================
 const processAIQuery = async (queryText) => {
   // Loader dikhao
@@ -654,12 +654,37 @@ const processAIQuery = async (queryText) => {
   copyBtn.style.display = "none";
 
   try {
-    // Yahan hum baad me apne Spring Boot AI API ka URL daalenge
-    console.log("AI ke paas bheja ja raha hai: ", queryText);
+    // 1. Apne Spring Boot backend ko text bhejo
+    const response = await fetch("http://localhost:8080/api/currency/smart-convert", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: queryText })
+    });
+
+    // 2. Backend se AI ka clean data aayega (eg. {amount: 100, from: "USD", to: "INR"})
+    const data = await response.json(); 
+
+    // Loader hatao
+    rateText.classList.remove("skeleton", "skeleton-rate");
+    finalAmountText.classList.remove("skeleton", "skeleton-amount");
+
+    if (data.error) {
+      rateText.innerText = "AI could not understand. Try again.";
+      return;
+    }
+
+    // 3. AI ke data se screen ke dropdowns aur box automatically set karo
+    updateUI("from", data.from);
+    updateUI("to", data.to);
+    amountInput.value = data.amount;
+
+    // 4. Ab asli rate convert karne wala function chala do
+    getExchangeRate();
+
   } catch (error) {
     rateText.classList.remove("skeleton", "skeleton-rate");
     finalAmountText.classList.remove("skeleton", "skeleton-amount");
-    rateText.innerText = "AI is thinking... (Backend not connected yet)";
+    rateText.innerText = "Error connecting to AI Backend";
     console.error(error);
   }
 };
