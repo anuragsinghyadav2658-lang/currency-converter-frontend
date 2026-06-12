@@ -749,3 +749,4 @@ if (SpeechRecognition) {
   micBtn.style.display = "none"; // Agar purana browser hai jisme mic nahi chalta, to button hide kar do
   console.log("Speech Recognition not supported in this browser.");
 }
+  
