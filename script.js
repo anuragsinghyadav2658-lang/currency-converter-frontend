@@ -666,7 +666,6 @@ const processAIQuery = async (queryText) => {
       },
     );
 
-    // 2. Backend se AI ka clean data aayega (eg. {amount: 100, from: "USD", to: "INR"})
     const data = await response.json();
 
     // Loader hatao
@@ -678,12 +677,12 @@ const processAIQuery = async (queryText) => {
       return;
     }
 
-    // 3. AI ke data se screen ke dropdowns aur box automatically set karo
+    // 2. AI ke data se screen ke dropdowns aur box automatically set karo
     updateUI("from", data.from);
     updateUI("to", data.to);
-    amountInput.value = data.amount;
+    amountInput.value = data.amount; // Ensure karna tumhare input box ka id 'amount' hai, to yahan amountInput use ho
 
-    // 4. Ab asli rate convert karne wala function chala do
+    // 3. Ab asli rate convert karne wala function chala do taaki wo history me add ho jaye
     getExchangeRate();
   } catch (error) {
     rateText.classList.remove("skeleton", "skeleton-rate");
@@ -749,4 +748,48 @@ if (SpeechRecognition) {
 } else {
   micBtn.style.display = "none"; // Agar purana browser hai jisme mic nahi chalta, to button hide kar do
   console.log("Speech Recognition not supported in this browser.");
+}
+
+const micBtn = document.getElementById("micBtn");
+const amountInput = document.getElementById("amount");
+
+// Browser Speech API Setup
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.lang = "en-IN"; // Indian accent support
+
+  micBtn.addEventListener("click", () => {
+    recognition.start();
+    micBtn.style.color = "#ff4d4d"; // Sunte time mic laal ho jayega
+    amountInput.placeholder = "Listening...";
+  });
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript.toLowerCase();
+    amountInput.value = transcript;
+    micBtn.style.color = "#a0a0a0"; // Wapas normal color
+    amountInput.placeholder = "Enter amount or '500 SAR to INR'...";
+
+    // Check karna ki user ne sirf number bola hai ya lamba sentence
+    // Agar aawaz mein alphabet/words hain, toh AI ko bhejo
+    if (/[a-z]/i.test(transcript)) {
+      processAIQuery(transcript);
+    } else {
+      // Agar sirf number bola hai (jaise "500"), toh normal button click trigger kar do
+      getExchangeRate();
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Mic Error: ", event.error);
+    micBtn.style.color = "#a0a0a0";
+    amountInput.placeholder = "Error. Try again.";
+  };
+} else {
+  // Agar browser purana hai toh mic icon chupa do
+  micBtn.style.display = "none";
 }
