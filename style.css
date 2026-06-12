@@ -613,3 +613,56 @@ select option {
   left: 0 !important;
   right: auto !important;
 }
+
+/* Mic aur Input box ka design
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding-right: 45px;
+  box-sizing: border-box;
+}
+
+.mic-btn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #a0a0a0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.mic-btn:hover {
+  color: #fff; /* Hover karne par thoda highlight ho jayega */
+ /* } */
+
+/* Input me mic ke liye thodi right side me jagah banana */
+#amount {
+    padding-right: 40px; 
+}
+
+/* Mic button ko input box ke andar set karna */
+.mic-btn {
+    position: absolute; 
+    right: 15px; 
+    top: 25px; /* Agar mic thoda upar-neeche lage, toh isko 20px ya 30px karke adjust kar lena */
+    transform: translateY(-50%); /* Ekdum center alignment ke liye */
+    background: transparent; 
+    border: none; 
+    cursor: pointer; 
+    color: #a0a0a0; 
+    outline: none;
+}
+
+.mic-btn:hover {
+    color: #fff;
+}
