@@ -750,8 +750,6 @@ if (SpeechRecognition) {
   console.log("Speech Recognition not supported in this browser.");
 }
 
-const amountInput = document.getElementById("amount");
-
 // Browser Speech API Setup
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
