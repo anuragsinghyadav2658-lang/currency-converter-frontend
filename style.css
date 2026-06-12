@@ -588,11 +588,11 @@ select option {
 
 /* Purane hover wale code ko isse replace kar de */
 .history-item:hover,
-.history-item.highlight { /* NAYI CLASS: Keyboard se select hone par active hogi */
+.history-item.highlight {
+  /* NAYI CLASS: Keyboard se select hone par active hogi */
   background-color: #2b2b36;
   color: #64ffda; /* Text ko bhi thoda chamka diya */
 }
-
 
 .history-dropdown::-webkit-scrollbar {
   width: 6px;
@@ -604,12 +604,12 @@ select option {
 
 /* --- RIGHT DROPDOWN SPECIFIC ALIGNMENT FIX --- */
 .dropdowns .from + .exchange-icon + .to .content-box {
-    left: auto !important;
-    right: 0 !important;
+  left: auto !important;
+  right: 0 !important;
 }
 
 /* Ensure left dropdown stays exactly aligned to the left */
 .dropdowns .from .content-box {
-    left: 0 !important;
-    right: auto !important;
+  left: 0 !important;
+  right: auto !important;
 }

@@ -598,7 +598,9 @@ amountInput.addEventListener("input", (e) => {
 const historyList = document.getElementById("history-list");
 const fetchHistory = async () => {
   try {
-    let response = await fetch("https://currency-converter-pro-1.onrender.com/api/currency/history");
+    let response = await fetch(
+      "https://currency-converter-pro-1.onrender.com/api/currency/history",
+    );
     let data = await response.json();
 
     if (historyList) historyList.innerHTML = "";
@@ -641,7 +643,7 @@ const fetchHistory = async () => {
 };
 
 window.addEventListener("load", fetchHistory);
- 
+
 // ==========================================
 // 9. SMART AI INPUT HANDLER (REAL BACKEND LINKED)
 // ==========================================
@@ -655,15 +657,17 @@ const processAIQuery = async (queryText) => {
 
   try {
     // 1. Apne Spring Boot backend ko text bhejo
-    const response = await fetch("https://currency-converter-pro-1.onrender.com/api/currency/smart-convert", {
-
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: queryText })
-    });
+    const response = await fetch(
+      "https://currency-converter-pro-1.onrender.com/api/currency/smart-convert",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: queryText }),
+      },
+    );
 
     // 2. Backend se AI ka clean data aayega (eg. {amount: 100, from: "USD", to: "INR"})
-    const data = await response.json(); 
+    const data = await response.json();
 
     // Loader hatao
     rateText.classList.remove("skeleton", "skeleton-rate");
@@ -681,7 +685,6 @@ const processAIQuery = async (queryText) => {
 
     // 4. Ab asli rate convert karne wala function chala do
     getExchangeRate();
-
   } catch (error) {
     rateText.classList.remove("skeleton", "skeleton-rate");
     finalAmountText.classList.remove("skeleton", "skeleton-amount");
@@ -708,3 +711,42 @@ convertBtn.addEventListener("click", (e) => {
   handleConversion(); // Naya function call kiya
   if (chartSection.classList.contains("show")) renderChart(activePeriod);
 });
+
+// Mic aur Input box ko pakdo
+const micBtn = document.getElementById("micBtn");
+const aiInputBox = document.getElementById("aiInputBox");
+
+// Browser ka Speech API check karo
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.lang = "en-IN"; // Indian English aur Hinglish achhe se pakadta hai
+
+  micBtn.addEventListener("click", () => {
+    recognition.start();
+    micBtn.innerText = "🔴"; // Jab sun raha ho to laal dikhe
+    aiInputBox.placeholder = "Listening...";
+  });
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    aiInputBox.value = transcript; // Jo bola wo text box me daal do
+    micBtn.innerText = "🎤"; // Wapas normal mic ban jao
+
+    // Yahan tera AI convert wala function automatic call karwa de
+    // Example: processAIQuery(transcript);
+    processAIQuery(transcript);
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Mic Error: ", event.error);
+    micBtn.innerText = "🎤";
+    aiInputBox.placeholder = "Error. Try again.";
+  };
+} else {
+  micBtn.style.display = "none"; // Agar purana browser hai jisme mic nahi chalta, to button hide kar do
+  console.log("Speech Recognition not supported in this browser.");
+}
