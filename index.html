@@ -32,42 +32,57 @@
       <h2>Currency Converter</h2>
 
       <div class="amount-box" style="position: relative">
-        <input type="text" id="amount" placeholder="Enter Amount" />
-
-        <div id="amount-history-dropdown" class="history-dropdown"></div>
-
-        <button
-          id="micBtn"
+        <div
           style="
-            position: absolute;
-            right: 10px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
+            position: relative;
+            width: 100%;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #a0a0a0;
           "
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+          <input
+            type="text"
+            id="amount"
+            placeholder="Enter amount or '500 SAR to INR'..."
+            style="width: 100%; padding-right: 45px; box-sizing: border-box"
+          />
+
+          <button
+            id="micBtn"
+            type="button"
+            style="
+              position: absolute;
+              right: 10px;
+              background: transparent;
+              border: none;
+              cursor: pointer;
+              color: #a0a0a0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              outline: none;
+            "
           >
-            <path
-              d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"
-            ></path>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-            <line x1="12" y1="19" x2="12" y2="22"></line>
-          </svg>
-        </button>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"
+              ></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div id="amount-history-dropdown" class="history-dropdown"></div>
       </div>
 
       <div class="dropdowns">

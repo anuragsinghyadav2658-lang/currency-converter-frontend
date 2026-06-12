@@ -750,7 +750,6 @@ if (SpeechRecognition) {
   console.log("Speech Recognition not supported in this browser.");
 }
 
-const micBtn = document.getElementById("micBtn");
 const amountInput = document.getElementById("amount");
 
 // Browser Speech API Setup
