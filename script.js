@@ -750,10 +750,6 @@ if (SpeechRecognition) {
   console.log("Speech Recognition not supported in this browser.");
 }
 
-// Browser Speech API Setup
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
 if (SpeechRecognition) {
   const recognition = new SpeechRecognition();
   recognition.continuous = false;
