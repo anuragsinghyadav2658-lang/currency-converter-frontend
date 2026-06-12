@@ -643,26 +643,28 @@ select option {
 
 .mic-btn:hover {
   color: #fff; /* Hover karne par thoda highlight ho jayega */
- /* } */
+/* } */
 
 /* Input me mic ke liye thodi right side me jagah banana */
 #amount {
-    padding-right: 40px; 
+  padding-right: 40px;
 }
 
 /* Mic button ko input box ke andar set karna */
 .mic-btn {
-    position: absolute; 
-    right: 15px; 
-    top: 25px; /* Agar mic thoda upar-neeche lage, toh isko 20px ya 30px karke adjust kar lena */
-    transform: translateY(-50%); /* Ekdum center alignment ke liye */
-    background: transparent; 
-    border: none; 
-    cursor: pointer; 
-    color: #a0a0a0; 
-    outline: none;
+  transition: all 0.2s ease-in-out;
+  padding: 6px; /* Dark background thoda bada aur gol dikhe */
+  position: absolute;
+  right: 15px;
+  top: 25px; /* Agar mic thoda upar-neeche lage, toh isko 20px ya 30px karke adjust kar lena */
+  transform: translateY(-50%); /* Ekdum center alignment ke liye */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #a0a0a0;
+  outline: none;
 }
 
 .mic-btn:hover {
-    color: #fff;
+  color: #fff;
 }

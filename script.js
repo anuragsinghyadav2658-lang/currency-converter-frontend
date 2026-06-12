@@ -712,41 +712,77 @@ convertBtn.addEventListener("click", (e) => {
 });
 
 // Mic aur Input box ko pakdo
-const micBtn = document.getElementById("micBtn");
-const aiInputBox = document.getElementById("aiInputBox");
+// 1. DOM Elements ko pakdo (Dhyan rakhna variables ke naam tere code se match karein)
+const micButton = document.getElementById("micBtn");
+const amountInp = document.getElementById("amount");
 
-// Browser ka Speech API check karo
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+// Browser ki Speech Recognition API ko check karo
+const SpeechRecog = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-if (SpeechRecognition) {
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.lang = "en-IN"; // Indian English aur Hinglish achhe se pakadta hai
+if (SpeechRecog) {
+  const recognition = new SpeechRecog();
+  recognition.continuous = false; // Ek sentence ke baad apne aap rukne ke liye
+  recognition.interimResults = false; // Sirf final result pakadne ke liye
+  recognition.lang = "en-IN"; // Indian accent aur Hinglish dono achhe se samajhta hai
 
-  micBtn.addEventListener("click", () => {
-    recognition.start();
-    micBtn.innerText = "🔴"; // Jab sun raha ho to laal dikhe
-    aiInputBox.placeholder = "Listening...";
+  // 2. JAB MIC BUTTON PAR CLICK HO (Start Listening)
+  micButton.addEventListener("click", () => {
+    try {
+      recognition.start();
+    } catch (err) {
+      // Agar pehle se chal raha ho toh dubara start karne par error na aaye
+      recognition.stop();
+    }
   });
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    aiInputBox.value = transcript; // Jo bola wo text box me daal do
-    micBtn.innerText = "🎤"; // Wapas normal mic ban jao
+  // JAB MIC SUNNA SHURU KARE (Keyboard jaisa effect)
+  recognition.onstart = () => {
+    // Mic ka background dark karne ke liye CSS class jodna ya direct color badalna
+    micButton.style.backgroundColor = "rgba(255, 255, 255, 0.15)";
+    micButton.style.borderRadius = "50%";
+    micButton.style.color = "#ff4d4d"; // Sunte time mic laal dikhega
+    amountInp.placeholder = "Listening... Speak now!";
 
-    // Yahan tera AI convert wala function automatic call karwa de
-    // Example: processAIQuery(transcript);
-    processAIQuery(transcript);
+    // Input box ke border ko thoda glow effect de dete hain taaki pata chale mic active hai
+    amountInp.style.borderColor = "#ff4d4d";
   };
 
+  // 3. JAB USER BOLNA BAND KAR DE AUR RESULT AA JAYE (Auto-Stop & Process)
+  recognition.onresult = (event) => {
+    const textResult = event.results[0][0].transcript.trim();
+    amountInp.value = textResult; // Jo bola wo automatic box me likha gaya
+
+    // Check karo ki sentence hai ya sirf number
+    if (/[a-z]/i.test(textResult)) {
+      // Agar words hain (jaise "500 usd to inr"), toh direct AI function call karo
+      processAIQuery(textResult);
+    } else {
+      // Agar sirf number bola hai (jaise "500"), toh normal rate conversion chalao
+      getExchangeRate();
+    }
+  };
+
+  // JAB MIC BAND HO JAYE (Wapas normal state me aana)
+  recognition.onend = () => {
+    micButton.style.backgroundColor = "transparent";
+    micButton.style.color = "#a0a0a0"; // Purana color wapas
+    amountInp.style.borderColor = ""; // Border normal
+    amountInp.placeholder = "Enter Amount";
+  };
+
+  // JAB KOI ERROR AAYE (Mic permission na mili ho ya network down ho)
   recognition.onerror = (event) => {
-    console.error("Mic Error: ", event.error);
-    micBtn.innerText = "🎤";
-    aiInputBox.placeholder = "Error. Try again.";
+    console.error("Speech Recognition Error: ", event.error);
+    if (event.error === "not-allowed") {
+      amountInp.placeholder = "Permission Denied. Allow Mic Access.";
+    } else {
+      amountInp.placeholder = "Try again...";
+    }
+    micButton.style.backgroundColor = "transparent";
+    micButton.style.color = "#a0a0a0";
   };
 } else {
-  micBtn.style.display = "none"; // Agar purana browser hai jisme mic nahi chalta, to button hide kar do
+  // Agar browser support nahi karta toh button chupa do
+  micButton.style.display = "none";
   console.log("Speech Recognition not supported in this browser.");
 }
-  
